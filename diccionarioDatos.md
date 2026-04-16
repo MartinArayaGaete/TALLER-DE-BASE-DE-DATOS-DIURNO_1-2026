@@ -1,12 +1,12 @@
 # Diccionario de Datos - Base de Datos de Ventas
 
-## 1. Tabla: Tipo_Doc
+## 1. Tabla: Tipo_Documento
 
 **Descripción:** Esta tabla permite distinguir el tipo de documento a emitir.
 
 | Campo | Tipo | Restricción | Descripción |
 |-------|------|------------|-------------|
-| id_tipo_doc | BIGINT | PRIMARY KEY | Identificador único del tipo de documento |
+| id_tipo_documento | BIGINT | PRIMARY KEY | Identificador único del tipo de documento |
 | tipo | VARCHAR(80) | NOT NULL | Nombre del tipo de documento (Boleta, Factura, Crédito) |
 
 ---
@@ -34,7 +34,6 @@
 | id_producto | BIGINT | PRIMARY KEY | Identificador único del producto |
 | nombre_producto | VARCHAR(80) | NOT NULL | Nombre del producto |
 | precio | INT | NOT NULL | Precio unitario del producto |
-| stock | INT | NOT NULL | Cantidad disponible en inventario |
 
 ---
 
@@ -42,6 +41,7 @@
 | Campo | Tipo | Restricción | Descripción |
 |-------|------|------------|-------------|
 | id_tienda | BIGINT | PRIMARY KEY | Identificador único de la tienda |
+| id_comuna | BIGINT | FOREIGN KEY | Referencia a la tabla Comuna |
 | nombre_tienda | VARCHAR(80) | NOT NULL | Nombre de la tienda |
 | direccion | VARCHAR(80) | NOT NULL | Dirección física de la tienda |
 
@@ -51,10 +51,10 @@
 | Campo | Tipo | Restricción | Descripción |
 |-------|------|------------|-------------|
 | id_empleado | BIGINT | PRIMARY KEY | Identificador único del empleado |
-| nombre_empleado | VARCHAR(80) | NOT NULL | Nombre completo del empleado |
 | id_sueldo | BIGINT | FOREIGN KEY | Referencia a la tabla Sueldo |
 | id_comuna | BIGINT | FOREIGN KEY | Referencia a la tabla Comuna |
 | id_tienda | BIGINT | FOREIGN KEY | Referencia a la tabla Tienda |
+| nombre_empleado | VARCHAR(80) | NOT NULL | Nombre completo del empleado |
 
 ---
 
@@ -62,8 +62,8 @@
 | Campo | Tipo | Restricción | Descripción |
 |-------|------|------------|-------------|
 | id_vendedor | BIGINT | PRIMARY KEY | Identificador único del vendedor |
-| nombre | VARCHAR(80) | NOT NULL | Nombre del vendedor |
 | id_empleado | BIGINT | FOREIGN KEY | Referencia a la tabla Empleado |
+| nombre | VARCHAR(80) | NOT NULL | Nombre del vendedor |
 
 
 ---
@@ -72,15 +72,15 @@
 | Campo | Tipo | Restricción | Descripción |
 |-------|------|------------|-------------|
 | id_venta | BIGINT | PRIMARY KEY | Identificador único de la venta |
-| fecha | DATE | NOT NULL | Fecha en que se realizó la venta |
-| monto_total | DECIMAL(10,2) | NOT NULL | Monto total de la venta |
 | id_vendedor | BIGINT | FOREIGN KEY | Referencia a la tabla Vendedor |
 | id_tienda | BIGINT | FOREIGN KEY | Referencia a la tabla Tienda |
 | id_tipo_doc | BIGINT | FOREIGN KEY | Referencia a la tabla Tipo_Doc |
+| fecha | DATE | NOT NULL | Fecha en que se realizó la venta |
+| monto_total | DECIMAL(10,2) | NOT NULL | Monto total de la venta |
 
 ---
 
-## 9. Tabla: Prod_Venta
+## 9. Tabla: Producto_Venta
 
 **Descripción:** Esta tabla de asociación permite vincular producto y venta.
 
@@ -89,6 +89,14 @@
 | id_prod_venta | BIGINT | PRIMARY KEY | Identificador único del registro producto-venta |
 | id_producto | BIGINT | FOREIGN KEY | Referencia a la tabla Producto |
 | id_venta | BIGINT | FOREIGN KEY | Referencia a la tabla Venta |
+
+---
+
+## 10. Tabla: Producto_Tienda
+
+| Campo | Tipo | Restricción | Descripción |
+|-------|------|------------|-------------|
+| stock | INT | NOT NULL | Cantidad disponible en inventario |
 
 ---
 

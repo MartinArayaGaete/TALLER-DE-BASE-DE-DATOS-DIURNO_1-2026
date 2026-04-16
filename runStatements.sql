@@ -25,11 +25,13 @@ FROM (
         ) AS ranking
     FROM Venta v
     JOIN Prod_Venta pv ON v.id_venta = pv.id_venta
-    JOIN Producto p ON pv.id_producto = p.product_id
+    JOIN Producto p ON pv.id_producto = p.product_id << IA la wea
     WHERE EXTRACT(YEAR FROM v.fecha) = 2021
     GROUP BY mes, p.nombre_producto
 ) t
 WHERE ranking = 1;/*aqui filtramos la tabla */
+
+
 /*Producto mas economico por tienda*/
 /*Ventas por mes, separadas entre Boletas y Facturas*/
 /*Empleado que gano mas por tienda en 2020, indicando la comuna

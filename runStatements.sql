@@ -47,6 +47,28 @@ ORDER BY DATE_TRUNC('month', Venta.fecha), Tipo_documento.tipo;
 
 /* 4. Empleado que gano mas por tienda en 2020, indicando la comuna
       donde vive y el cargo que tiene en la empresa */
+WITH totales_anuales AS (
+    SELECT e.id_empleado, e.id_tienda, e.nombre_empleado, e.id_comuna, e.cargo, 
+    SUM(s.monto_sueldo) AS total_2020
+	
+    FROM empleado e
+    INNER JOIN sueldo s ON e.id_empleado = s.id_empleado
+    WHERE EXTRACT(YEAR FROM s.fecha_pago) = 2020
+    GROUP BY e.id_empleado, e.id_tienda, e.nombre_empleado, e.id_comuna, e.cargo
+),
+
+max_por_tienda AS (
+    SELECT id_tienda, MAX(total_2020) AS monto_max
+    FROM totales_anuales
+    GROUP BY id_tienda
+)
+
+SELECT t.nombre_tienda, ta.nombre_empleado, c.nombre_comuna, ta.cargo, ta.total_2020
+FROM totales_anuales ta
+INNER JOIN max_por_tienda mpt ON ((ta.id_tienda = mpt.id_tienda) AND (ta.total_2020 = mpt.monto_max))
+INNER JOIN tienda t ON ta.id_tienda = t.id_tienda
+INNER JOIN comuna c ON ta.id_comuna = c.id_comuna;
+
 
 /* 5. La tienda que tiene menos empleados */
 SELECT e.id_tienda, numero_empleados,id_comuna,nombre_tienda,direccion_tienda

@@ -47,6 +47,17 @@ ORDER BY DATE_TRUNC('month', Venta.fecha), Tipo_documento.tipo;
       donde vive y el cargo que tiene en la empresa */
 
 /* 5. La tienda que tiene menos empleados */
+SELECT e.id_tienda, numero_empleados,id_comuna,nombre_tienda,direccion_tienda
+FROM (
+		SELECT id_tienda ,COUNT(*) AS numero_empleados
+		FROM empleado
+		GROUP BY id_tienda
+) e 
+INNER JOIN tienda 
+ON e.id_tienda = tienda.id_tienda
+ORDER BY e.numero_empleados ASC
+LIMIT 1
+;
 
 /* 6. El vendedor con mas ventas por mes */
 WITH ventas_por_vendedor AS (

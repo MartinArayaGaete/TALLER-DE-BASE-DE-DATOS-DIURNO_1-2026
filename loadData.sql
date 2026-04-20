@@ -1,4 +1,4 @@
-INSERT INTO Tipo_Doc (id_tipo_doc, tipo) VALUES
+INSERT INTO Tipo_Documento (id_tipo_documento, tipo) VALUES
 (1, 'Boleta'),
 (2, 'Factura'),
 (3, 'Crédito');
@@ -64,7 +64,7 @@ INSERT INTO Vendedor (id_vendedor, nombre, id_empleado) VALUES
 (2, 'María González', 2),
 (3, 'Camila Torres', 6);
 
-INSERT INTO Venta (id_venta, fecha, monto_total, id_vendedor, id_tienda, id_tipo_doc) VALUES
+INSERT INTO Venta (id_venta, fecha, monto_total, id_vendedor, id_tienda, id_tipo_documento) VALUES
 (1, '2020-04-01', 815000.00, 1, 1, 1),
 (2, '2020-04-02', 45000.00, 2, 2, 2),
 (3, '2021-09-03', 230000.00, 3, 5, 1), 
@@ -81,7 +81,7 @@ INSERT INTO Venta (id_venta, fecha, monto_total, id_vendedor, id_tienda, id_tipo
 (14, '2021-12-04', 300000.00, 1, 1, 2), 
 (15, '2021-03-05', 450000.00, 2, 2, 3); 
 
-INSERT INTO Prod_Venta (id_prod_venta, id_producto, id_venta, cantidad) VALUES
+INSERT INTO Producto_Venta (id_producto_venta, id_producto, id_venta, cantidad) VALUES
 (1, 1, 1, 1), 
 (2, 2, 1, 1), 
 (3, 7, 2, 1), 
@@ -137,7 +137,7 @@ INSERT INTO Venta (id_venta, fecha, monto_total, id_vendedor, id_tienda, id_tipo
 (15, '2021-12-31', 500000.00, 3, 3, 2);
 
 
-INSERT INTO Prod_Venta (id_prod_venta, id_producto, id_venta, cantidad) VALUES
+INSERT INTO Producto_Venta (id_producto_venta, id_producto, id_venta, cantidad) VALUES
 -- Venta 1 (2020)
 (1, 2, 1, 2),
 (2, 3, 1, 1),

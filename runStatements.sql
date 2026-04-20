@@ -12,7 +12,7 @@ Venta(id_venta,fecha,monto_total,id_vendedor,id_tienda,id_tipo_doc)
 Prod_Venta(id_prod_venta,id_producto,id_venta)
 */
 
-/*Producto Mas vendido por mes el 2021*/
+/* 1. Producto Mas vendido por mes el 2021 */
 SELECT mes, nombre_producto, total_vendido
 FROM (
     SELECT 
@@ -32,13 +32,23 @@ FROM (
 WHERE ranking = 1;/*aqui filtramos la tabla */
 
 
-/*Producto mas economico por tienda*/
-/*Ventas por mes, separadas entre Boletas y Facturas*/
-/*Empleado que gano mas por tienda en 2020, indicando la comuna
-donde vive y el cargo que tiene en la empresa
-*/
-/*la tienda que tiene menos empleados*/
-/*el vendedor con mas ventas por mes*/
+/* 2. Producto mas economico por tienda */
+
+/* 3. Ventas por mes, separadas entre Boletas y Facturas */
+SELECT DATE_TRUNC('month', Venta.fecha), Tipo_Documento.tipo, COUNT(*) AS cantidad_ventas
+FROM Venta
+INNER JOIN Tipo_Documento ON Venta.id_tipo_documento = Tipo_Documento.id_tipo_documento
+WHERE Tipo_Documento.tipo = 'Boleta' OR Tipo_Documento.tipo = 'Factura'
+GROUP BY DATE_TRUNC('month', Venta.fecha), Tipo_Documento.tipo
+ORDER BY DATE_TRUNC('month', Venta.fecha), Tipo_documento.tipo;
+
+
+/* 4. Empleado que gano mas por tienda en 2020, indicando la comuna
+      donde vive y el cargo que tiene en la empresa */
+
+/* 5. La tienda que tiene menos empleados */
+
+/* 6. El vendedor con mas ventas por mes */
 WITH ventas_por_vendedor AS (
     SELECT 
         v.id_vendedor,
@@ -73,10 +83,15 @@ JOIN maximos m
    AND vp.mes = m.mes 
    AND vp.cantidad_ventas = m.max_ventas
 ORDER BY vp.anio, vp.mes;
-/*el vendedor que ha recaudado mas dinero para la tienda por año*/
-/*El vendedor con mas productos vendidos por tineda*/
-/*El empleado con mayor sueldo por mes*/
-/*La tienda con menor recaudacion por mes*/
+
+/* 7. El vendedor que ha recaudado mas dinero para la tienda por año */
+
+
+/* 8. El vendedor con mas productos vendidos por tienda */
+
+/* 9. El empleado con mayor sueldo por mes */
+
+/* 10. La tienda con menor recaudacion por mes */
 WITH recaudacion_mensual AS (
     SELECT 
         ti.id_tienda,

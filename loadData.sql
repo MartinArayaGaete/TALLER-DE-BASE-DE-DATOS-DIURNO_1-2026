@@ -4,20 +4,20 @@ INSERT INTO Tipo_Doc (id_tipo_doc, tipo) VALUES
 (3, 'Crédito');
 
 INSERT INTO Producto (id_producto, nombre_producto, precio, stock) VALUES
-(1, 'Laptop', 800000, 10),
-(2, 'Mouse', 15000, 50),
-(3, 'Teclado', 30000, 30),
-(4, 'Monitor', 200000, 20),
-(5, 'Impresora', 120000, 15),
-(6, 'Audifonos', 25000, 40),
-(7, 'Parlantes', 45000, 25),
-(8, 'Webcam', 35000, 18),
-(9, 'Disco Duro', 90000, 12),
-(10, 'Memoria USB', 10000, 60),
-(11, 'Silla Gamer', 150000, 8),
-(12, 'Escritorio', 100000, 5),
-(13, 'Smartphone', 500000, 22),
-(14, 'Cargador', 12000, 35);
+(1, 'Laptop',     800000, 10),
+(2, 'Mouse',      15000,  50),
+(3, 'Teclado',    30000,  30),
+(4, 'Monitor',    200000, 20),
+(5, 'Impresora',  120000, 15),
+(6, 'Audifonos',  25000,  40),
+(7, 'Parlantes',  45000,  25),
+(8, 'Webcam',     35000,  18),
+(9, 'Disco Duro', 90000,  12),
+(10,'Memoria USB',10000,  60),
+(11,'Silla Gamer',150000, 8),
+(12,'Escritorio', 100000, 5),
+(13,'Smartphone', 500000, 22),
+(14,'Cargador',   12000,  35);
 
 INSERT INTO Comuna (id_comuna, nombre_comuna) VALUES
 (1, 'Santiago'), (2, 'Cerrillos'), (3, 'Cerro Navia'), (4, 'Conchalí'),

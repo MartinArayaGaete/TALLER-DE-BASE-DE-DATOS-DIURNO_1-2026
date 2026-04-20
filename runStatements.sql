@@ -13,26 +13,28 @@ Prod_Venta(id_prod_venta,id_producto,id_venta)
 */
 
 /* 1. Producto Mas vendido por mes el 2021 */
-SELECT mes, nombre_producto, total_vendido
+
+/* Si no hay ventas en el mes x, no se muestra en la lista */
+SELECT DISTINCT ON (mes) mes,venta2021.id_producto,nombre_producto,cantidad_vendida
 FROM (
-    SELECT 
-        EXTRACT(MONTH FROM v.fecha) AS mes,
-        p.nombre_producto,
-        COUNT(*) AS total_vendido,
-        ROW_NUMBER() OVER (
-            PARTITION BY EXTRACT(MONTH FROM v.fecha)
-            ORDER BY COUNT(*) DESC
-        ) AS ranking
-    FROM Venta v
-    JOIN Prod_Venta pv ON v.id_venta = pv.id_venta
-    JOIN Producto p ON pv.id_producto = p.product_id << IA la wea
-    WHERE EXTRACT(YEAR FROM v.fecha) = 2021
-    GROUP BY mes, p.nombre_producto
-) t
-WHERE ranking = 1;/*aqui filtramos la tabla */
+  SELECT id_producto, TO_CHAR(fecha,'Month') AS mes, SUM(cantidad) AS cantidad_vendida
+  FROM venta
+  JOIN producto_venta ON venta.id_venta = producto_venta.id_venta
+  WHERE EXTRACT (YEAR from fecha) = 2021
+  GROUP BY id_producto, mes
+) as venta2021
+JOIN producto ON producto.id_producto = venta2021.id_producto
+ORDER BY mes,nombre_producto, cantidad_vendida, id_producto DESC;
+
 
 
 /* 2. Producto mas economico por tienda */
+
+/* Si la tienda no tiene productos, no se muestra en la lista */
+SELECT DISTINCT ON (id_tienda) id_tienda, nombre_producto, precio, stock
+FROM producto
+ORDER BY id_tienda, precio ASC;
+
 
 /* 3. Ventas por mes, separadas entre Boletas y Facturas */
 SELECT DATE_TRUNC('month', Venta.fecha), Tipo_Documento.tipo, COUNT(*) AS cantidad_ventas
@@ -56,8 +58,7 @@ FROM (
 INNER JOIN tienda 
 ON e.id_tienda = tienda.id_tienda
 ORDER BY e.numero_empleados ASC
-LIMIT 1
-;
+LIMIT 1;
 
 /* 6. El vendedor con mas ventas por mes */
 WITH ventas_por_vendedor AS (

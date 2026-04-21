@@ -105,10 +105,10 @@ JOIN maximos m
 ORDER BY vp.anio, vp.mes;
 
 /* 7. El vendedor que ha recaudado mas dinero para la tienda por año */
-WITH ventas_vendedor AS (SELECT EXTRACT(YEAR FROM venta.fecha) as ano, vendedor.id_vendedor, SUM(producto.precio * producto_venta.cantidad) AS total_recaudado
-                         FROM Venta 
-                         JOIN Producto_Venta ON venta.id_venta = producto_venta.id_venta
-                         JOIN Producto ON producto_venta.id_producto = producto.id_producto
+WITH ventas_vendedor AS (SELECT EXTRACT(YEAR FROM venta.fecha) as ano, venta.id_vendedor, SUM(producto.precio * producto_venta.cantidad) AS total_recaudado
+                         FROM venta 
+                         JOIN producto_venta ON venta.id_venta = producto_venta.id_venta
+                         JOIN producto ON producto_venta.id_producto = producto.id_producto
                          GROUP BY ano, venta.id_vendedor),
 mejores AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY ano ORDER BY total_recaudado DESC) AS mejor
             FROM ventas_vendedor)
@@ -120,8 +120,30 @@ WHERE mejores.mejor = 1
 ORDER BY mejores.ano;
 
 /* 8. El vendedor con mas productos vendidos por tienda */
+SELECT DISTINCT ON (tienda.id_tienda)
+    tienda.id_tienda,
+    tienda.nombre_tienda,
+    vendedor.id_vendedor,
+    empleado.nombre_empleado,
+    SUM(producto_venta.cantidad) AS total_productos_vendidos
+FROM venta
+JOIN producto_venta ON venta.id_venta = producto_venta.id_venta
+JOIN vendedor ON venta.id_vendedor = vendedor.id_vendedor
+JOIN empleado ON vendedor.id_empleado = empleado.id_empleado
+JOIN tienda ON venta.id_tienda = tienda.id_tienda
+GROUP BY tienda.id_tienda, tienda.nombre_tienda, vendedor.id_vendedor, empleado.nombre_empleado
+ORDER BY tienda.id_tienda, SUM(producto_venta.cantidad) DESC;
 
 /* 9. El empleado con mayor sueldo por mes */
+SELECT DISTINCT ON (DATE_TRUNC('month', sueldo.fecha_pago))
+    DATE_TRUNC('month', sueldo.fecha_pago) AS mes,
+    empleado.id_empleado,
+    empleado.nombre_empleado,
+    SUM(sueldo.monto_sueldo) AS total_sueldo
+FROM sueldo
+JOIN empleado ON sueldo.id_empleado = empleado.id_empleado
+GROUP BY DATE_TRUNC('month', sueldo.fecha_pago), empleado.id_empleado, empleado.nombre_empleado
+ORDER BY DATE_TRUNC('month', sueldo.fecha_pago), SUM(sueldo.monto_sueldo) DESC;
 
 /* 10. La tienda con menor recaudacion por mes */
 WITH recaudacion_mensual AS (

@@ -1,26 +1,127 @@
-DBA-Grupo 1
-Prerrequisitos
-Tener Docker instalado.
+# Control 1 - Base de Datos
 
-Guía de ejecución
-Una vez descargada la carpeta con el código fuente, la ejecución se realiza desde la terminal.
+Este repositorio contiene scripts SQL y configuración Docker para crear una base de datos, cargar datos y ejecutar consultas de prueba.
 
-Primero, se debe ingresar al directorio "/TALLER-DE-BASE-DE-DATOS-DIURNO_1-2026":
+## Requisitos
 
-cd /TALLER-DE-BASE-DE-DATOS-DIURNO_1-2026
+- Docker Desktop o Docker Engine instalado
+- Docker Compose habilitado (`docker compose`)
+- Terminal (Linux/macOS) o PowerShell (Windows)
 
-Después de ingresar al directorio, se debe levantar el contenedor con el siguiente comando:
+## Archivos principales
 
+- `dbCreate.sql`: crea la estructura de la base de datos (tablas, relaciones, etc.)
+- `loadData.sql`: carga datos iniciales
+- `runStatements.sql`: ejecuta consultas de ejemplo
+- `docker-compose.yml`: define el contenedor de PostgreSQL
+- `diccionarioDatos.md`: apoyo para entender el modelo
+
+## Ejecucion basica
+
+### 1. Entrar a la carpeta del proyecto
+
+Linux/macOS:
+
+```bash
+cd /home/martin/Descargas/TBD/Control1
+```
+
+Windows (PowerShell):
+
+```powershell
+cd C:\ruta\a\Control1
+```
+
+### 2. Levantar el contenedor
+
+```bash
 docker compose up -d
+```
 
-Tras levantar el contenedor, se debe ejecutar el script dbCreate.sql, el cual está encargado de la creación de la base de datos:
+### 3. Crear tablas y estructura
 
+Linux/macOS:
+
+```bash
 docker compose exec -T db psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f - < dbCreate.sql
+```
 
-Después, se debe ejecutar loadData.sql, script con el cual se llenarán las tablas con datos:
+Windows (PowerShell):
 
+```powershell
+Get-Content .\dbCreate.sql | docker compose exec -T db psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f -
+```
+
+### 4. Cargar datos
+
+Linux/macOS:
+
+```bash
 docker compose exec -T db psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f - < loadData.sql
+```
 
-Finalmente, se debe ejecutar runStatements.sql, el cual contiene las consultas:
+Windows (PowerShell):
 
+```powershell
+Get-Content .\loadData.sql | docker compose exec -T db psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f -
+```
+
+### 5. Ejecutar consultas del control
+
+Linux/macOS:
+
+```bash
 docker compose exec -T db psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f - < runStatements.sql
+```
+
+Windows (PowerShell):
+
+```powershell
+Get-Content .\runStatements.sql | docker compose exec -T db psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f -
+```
+
+## Comandos utiles para revisar la base
+
+### Abrir consola de PostgreSQL en el contenedor
+
+```bash
+docker compose exec db psql -U postgres -d postgres
+```
+
+### Ver tablas
+
+Dentro de `psql`:
+
+```sql
+\dt
+```
+
+### Ver estructura de una tabla
+
+```sql
+\d nombre_tabla
+```
+
+### Hacer una consulta simple
+
+```sql
+SELECT *
+FROM nombre_tabla
+LIMIT 10;
+```
+
+## Apagar el entorno
+
+```bash
+docker compose down
+```
+
+Si tambien quieres eliminar volumenes (datos persistidos):
+
+```bash
+docker compose down -v
+```
+
+## Nota corta
+
+Si `docker compose` no funciona en tu equipo, prueba `docker-compose` (versiones antiguas).

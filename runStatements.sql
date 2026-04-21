@@ -119,7 +119,19 @@ JOIN maximos m
 ORDER BY vp.anio, vp.mes;
 
 /* 7. El vendedor que ha recaudado mas dinero para la tienda por año */
-
+WITH ventas_vendedor AS (SELECT EXTRACT(YEAR FROM Venta.fecha) as ano, Vendedor.id_vendedor, SUM(Producto.precio * Producto_Venta.cantidad) AS total_recaudado
+                         FROM Venta 
+                         JOIN Producto_Venta ON Venta.id_venta = Producto_Venta.id_venta
+                         JOIN Producto ON Producto_Venta.id_producto = Producto.id_producto
+                         GROUP BY ano, Venta.id_vendedor),
+mejores AS (SELECT *, ROW_NUMBRE() OVER (PARTITION BY ano ORDER BY total_recaudado DESC) AS mejor
+            FROM ventas_vendedor)
+SELECT mejores.ano, mejores.id_vendedor, empleado.nombre_empleado, mejores.total_recaudado
+FROM mejores
+JOIN Vendedor ON mejores.id_vendedor = vendedor.id_vendedor
+JOIN Empleado ON Vendedor.id_empleado = Empleado.id_empleado
+WHERE mejores.mejor = 1
+ORDER BY mejores.ano;
 
 /* 8. El vendedor con mas productos vendidos por tienda */
 

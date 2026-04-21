@@ -1,17 +1,3 @@
-/*TABLAS*/
-
-/*
-Tipo_Doc(id_tipo,tipo)
-Producto (id_producto, nombre_producto, precio, stock, campo)
-Comuna (id_comuna, nombre_comuna)
-Sueldo (id_sueldo, sueldo, cargo)
-Tienda (id_tienda, nombre_tienda, direccion)
-Empleado(id_empleado,nombre_empleado,id_sueldo,id_comuna)
-Vendedor(id_vendedor,nombre,id_empleado)
-Venta(id_venta,fecha,monto_total,id_vendedor,id_tienda,id_tipo_doc)
-Prod_Venta(id_prod_venta,id_producto,id_venta)
-*/
-
 /* 1. Producto Mas vendido por mes el 2021 */
 
 /* Si no hay ventas en el mes x, no se muestra en la lista */

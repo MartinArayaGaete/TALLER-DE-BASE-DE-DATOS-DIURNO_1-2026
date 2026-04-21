@@ -22,8 +22,9 @@ Este repositorio contiene scripts SQL y configuración Docker para crear una bas
 
 Linux/macOS:
 
+ejemplo:
 ```bash
-cd /home/martin/Descargas/TBD/Control1
+cd /ruta
 ```
 
 Windows (PowerShell):
@@ -78,6 +79,63 @@ Windows (PowerShell):
 
 ```powershell
 Get-Content .\runStatements.sql | docker compose exec -T db psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f -
+```
+
+## Flujo alternativo con docker exec (contenedor fijo)
+
+Si prefieres trabajar con nombre de contenedor directo (ejemplo: `tiendaControl_1`) y una base dedicada (`control_1_ventas`), puedes usar este flujo:
+
+### 1. Crear base
+
+```bash
+docker exec -it tiendaControl_1 createdb -U postgres control_1_ventas
+```
+
+### 2. Crear tablas
+
+Linux/macOS:
+
+```bash
+docker exec -i tiendaControl_1 psql -U postgres -d control_1_ventas < dbCreate.sql
+```
+
+Windows (PowerShell):
+
+```powershell
+Get-Content .\dbCreate.sql | docker exec -i tiendaControl_1 psql -U postgres -d control_1_ventas
+```
+
+### 3. Cargar datos
+
+Linux/macOS:
+
+```bash
+docker exec -i tiendaControl_1 psql -U postgres -d control_1_ventas < loadData.sql
+```
+
+Windows (PowerShell):
+
+```powershell
+Get-Content .\loadData.sql | docker exec -i tiendaControl_1 psql -U postgres -d control_1_ventas
+```
+
+### 4. Probar
+
+```bash
+docker exec -i tiendaControl_1 psql -U postgres -d control_1_ventas -c "\dt"
+docker exec -i tiendaControl_1 psql -U postgres -d control_1_ventas -c "SELECT COUNT(*) FROM comuna;"
+```
+
+### 5. Eliminar base
+
+```bash
+docker exec -it tiendaControl_1 psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS control_1_ventas;"
+```
+
+Si tu contenedor tiene otro nombre, revisalo con:
+
+```bash
+docker ps --format "table {{.Names}}\t{{.Status}}"
 ```
 
 ## Comandos utiles para revisar la base

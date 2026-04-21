@@ -124,7 +124,7 @@ WITH ventas_vendedor AS (SELECT EXTRACT(YEAR FROM Venta.fecha) as ano, Vendedor.
                          JOIN Producto_Venta ON Venta.id_venta = Producto_Venta.id_venta
                          JOIN Producto ON Producto_Venta.id_producto = Producto.id_producto
                          GROUP BY ano, Venta.id_vendedor),
-mejores AS (SELECT *, ROW_NUMBRE() OVER (PARTITION BY ano ORDER BY total_recaudado DESC) AS mejor
+mejores AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY ano ORDER BY total_recaudado DESC) AS mejor
             FROM ventas_vendedor)
 SELECT mejores.ano, mejores.id_vendedor, empleado.nombre_empleado, mejores.total_recaudado
 FROM mejores
